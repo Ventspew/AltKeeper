@@ -181,7 +181,7 @@ struct SettingsView: View {
                 }
                 Button("Annuleer", role: .cancel) {}
             } message: {
-                Text("Je lokale accounts worden bij de volgende start gekopieerd naar iCloud. Sluit de app daarna volledig af en open opnieuw. AltKeeper slaat nog steeds geen wachtwoorden op.")
+                Text("iCloud-sync vereist een build met CloudKit-entitlement (betaald Developer-account). Op unsigned/sideload-builds blijft sync uitgeschakeld of beperkt. Lokale accounts worden anders bij de volgende start gekopieerd. AltKeeper slaat geen wachtwoorden op.")
             }
             .alert("iCloud-synchronisatie uitschakelen?", isPresented: $showDisableCloudKitAlert) {
                 Button("Uitschakelen", role: .destructive) {

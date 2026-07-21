@@ -4,9 +4,9 @@ import SwiftData
 @main
 struct AltKeeperApp: App {
     @Environment(\.scenePhase) private var scenePhase
-    @StateObject private var authService = AuthenticationService.shared
-    @StateObject private var settings = AppSettings.shared
-    @StateObject private var cloudKitSync = CloudKitSyncService.shared
+    @ObservedObject private var authService = AuthenticationService.shared
+    @ObservedObject private var settings = AppSettings.shared
+    @ObservedObject private var cloudKitSync = CloudKitSyncService.shared
 
     private let modelContainer: ModelContainer
 
@@ -15,7 +15,14 @@ struct AltKeeperApp: App {
             modelContainer = try ModelContainerFactory.makeContainer()
             SampleDataService.seedSampleAccounts(into: modelContainer.mainContext)
         } catch {
-            fatalError("Kon ModelContainer niet initialiseren: \(error.localizedDescription)")
+            // Last-resort in-memory store so the app still launches if disk/CloudKit setup fails.
+            let schema = Schema([GameAccount.self])
+            let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
+            do {
+                modelContainer = try ModelContainer(for: schema, configurations: [configuration])
+            } catch {
+                fatalError("Kon ModelContainer niet initialiseren: \(error.localizedDescription)")
+            }
         }
     }
 

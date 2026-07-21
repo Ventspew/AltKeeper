@@ -11,9 +11,25 @@ final class CloudKitSyncService: ObservableObject {
     @Published private(set) var lastSyncDate: Date?
     @Published private(set) var lastErrorMessage: String?
 
-    private let container = CKContainer(identifier: ModelContainerFactory.cloudKitContainerIdentifier)
+    private var cloudContainer: CKContainer?
+    private var didRegisterSyncObserver = false
 
-    private init() {
+    private init() {}
+
+    private func container() -> CKContainer {
+        if let cloudContainer {
+            return cloudContainer
+        }
+        let created = CKContainer(identifier: ModelContainerFactory.cloudKitContainerIdentifier)
+        cloudContainer = created
+        registerSyncObserverIfNeeded()
+        return created
+    }
+
+    private func registerSyncObserverIfNeeded() {
+        guard !didRegisterSyncObserver else { return }
+        didRegisterSyncObserver = true
+
         NotificationCenter.default.addObserver(
             forName: NSPersistentCloudKitContainer.eventChangedNotification,
             object: nil,
@@ -26,8 +42,14 @@ final class CloudKitSyncService: ObservableObject {
     }
 
     func refreshAccountStatus() async {
+        guard AppSettings.shared.iCloudSyncEnabled else {
+            accountStatus = .couldNotDetermine
+            lastErrorMessage = nil
+            return
+        }
+
         do {
-            accountStatus = try await container.accountStatus()
+            accountStatus = try await container().accountStatus()
             if accountStatus != .available {
                 lastErrorMessage = message(for: accountStatus)
             } else {

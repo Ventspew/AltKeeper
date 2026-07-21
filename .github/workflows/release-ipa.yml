@@ -35,6 +35,11 @@ jobs:
       - name: Package unsigned IPA
         run: |
           APP_PATH=$(find "$RUNNER_TEMP/AltKeeper.xcarchive/Products/Applications" -name '*.app' -maxdepth 1 | head -1)
+          # Ensure no privileged entitlements remain (sideload crash on device).
+          ENTITLEMENTS="$APP_PATH/archived-expanded-entitlements.xcent"
+          if [[ -f "$ENTITLEMENTS" ]]; then
+            /usr/libexec/PlistBuddy -c 'Clear dict' "$ENTITLEMENTS" || true
+          fi
           mkdir -p "$RUNNER_TEMP/Payload"
           cp -R "$APP_PATH" "$RUNNER_TEMP/Payload/"
           cd "$RUNNER_TEMP" && zip -qr AltKeeper-unsigned.ipa Payload

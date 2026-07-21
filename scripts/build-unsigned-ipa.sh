@@ -25,6 +25,11 @@ if [[ -z "$APP_PATH" ]]; then
 fi
 
 echo "==> IPA aanmaken..."
+# Ensure no privileged entitlements remain (sideload crash on device).
+ENTITLEMENTS="$APP_PATH/archived-expanded-entitlements.xcent"
+if [[ -f "$ENTITLEMENTS" ]]; then
+  /usr/libexec/PlistBuddy -c 'Clear dict' "$ENTITLEMENTS" || true
+fi
 rm -rf "$BUILD_DIR/Payload" "$IPA_PATH"
 mkdir -p "$BUILD_DIR/Payload"
 cp -R "$APP_PATH" "$BUILD_DIR/Payload/"
