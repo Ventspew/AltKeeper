@@ -1,0 +1,63 @@
+name: Release Unsigned IPA
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-ipa:
+    runs-on: macos-15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode.app
+
+      - name: Build unsigned archive
+        run: |
+          xcodebuild \
+            -project AltKeeper.xcodeproj \
+            -scheme AltKeeper \
+            -destination 'generic/platform=iOS' \
+            -archivePath "$RUNNER_TEMP/AltKeeper.xcarchive" \
+            archive \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            DEVELOPMENT_TEAM=""
+
+      - name: Package unsigned IPA
+        run: |
+          APP_PATH=$(find "$RUNNER_TEMP/AltKeeper.xcarchive/Products/Applications" -name '*.app' -maxdepth 1 | head -1)
+          mkdir -p "$RUNNER_TEMP/Payload"
+          cp -R "$APP_PATH" "$RUNNER_TEMP/Payload/"
+          cd "$RUNNER_TEMP" && zip -qr AltKeeper-unsigned.ipa Payload
+          mv "$RUNNER_TEMP/AltKeeper-unsigned.ipa" "$GITHUB_WORKSPACE/AltKeeper-unsigned.ipa"
+
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: AltKeeper-unsigned-ipa
+          path: AltKeeper-unsigned.ipa
+          retention-days: 90
+
+      - name: Publish GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: AltKeeper-unsigned.ipa
+          generate_release_notes: true
+          body: |
+            ## AltKeeper unsigned IPA
+
+            Deze build is **niet code-signed**. Installeer via AltStore, Sideloadly of vergelijkbaar.
+
+            Zie [INSTALL.md](INSTALL.md) voor installatie-instructies.
+
+            > AltKeeper slaat geen wachtwoorden op — alleen accountmetadata.
