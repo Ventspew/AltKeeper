@@ -4,7 +4,7 @@
 import os
 import uuid
 
-ROOT = "/agent"
+ROOT = os.path.dirname(os.path.abspath(__file__))
 PROJECT_NAME = "AltKeeper"
 BUNDLE_ID = "com.altkeeper.app"
 
@@ -121,7 +121,7 @@ def main():
     group_paths = {
         app_group_id: PROJECT_NAME,
         tests_group_id: f"{PROJECT_NAME}Tests",
-        resources_group_id: f"{PROJECT_NAME}/Resources",
+        resources_group_id: "Resources",
         model_group: "Models",
         service_group: "Services",
         vm_group: "ViewModels",
