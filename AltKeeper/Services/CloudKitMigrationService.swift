@@ -14,6 +14,7 @@ enum CloudKitMigrationService {
     }
 
     /// Copies local accounts into the CloudKit-backed store, skipping IDs already present.
+    @MainActor
     static func migrateLocalStoreToCloud() throws {
         let localContainer = try ModelContainerFactory.makeLocalContainer()
         let cloudContainer = try ModelContainerFactory.makeCloudContainer()

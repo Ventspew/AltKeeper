@@ -10,6 +10,7 @@ enum ModelContainerFactory {
         UserDefaults.standard.bool(forKey: AppSettings.Keys.iCloudSyncEnabled)
     }
 
+    @MainActor
     static func makeContainer() throws -> ModelContainer {
         let schema = Schema([GameAccount.self])
 
