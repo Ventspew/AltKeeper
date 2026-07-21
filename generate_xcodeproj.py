@@ -81,23 +81,24 @@ def main():
         build_files_test[src] = gen_id()
 
     def group_for(path):
-        if "Models/" in path:
-            return model_group
-        if "Services/" in path:
-            return service_group
-        if "ViewModels/" in path:
+        # Order matters: ViewModels contains the substring "Models/"
+        if "/ViewModels/" in f"/{path}":
             return vm_group
-        if "Utilities/" in path:
+        if "/Models/" in f"/{path}":
+            return model_group
+        if "/Services/" in f"/{path}":
+            return service_group
+        if "/Utilities/" in f"/{path}":
             return util_group
-        if "Dashboard/" in path:
+        if "/Dashboard/" in f"/{path}":
             return dashboard_group
-        if "Accounts/" in path:
+        if "/Accounts/" in f"/{path}":
             return accounts_group
-        if "Settings/" in path:
+        if "/Settings/" in f"/{path}":
             return settings_group
-        if "Components/" in path:
+        if "/Components/" in f"/{path}":
             return components_group
-        if "Views/" in path:
+        if "/Views/" in f"/{path}":
             return view_group
         return app_group_id
 

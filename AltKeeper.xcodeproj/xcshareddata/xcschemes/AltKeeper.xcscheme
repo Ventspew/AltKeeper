@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6A171FA34045406194D1F410"
+               BlueprintIdentifier = "9B9EFFE3FA414FD5A3BA3522"
                BuildableName = "AltKeeper.app"
                BlueprintName = "AltKeeper"
                ReferencedContainer = "container:AltKeeper.xcodeproj">
@@ -32,7 +32,7 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "45CAFD09CAC241E0ACD0183A"
+               BlueprintIdentifier = "0BFCB290D8C3410D83BC6190"
                BuildableName = "AltKeeperTests.xctest"
                BlueprintName = "AltKeeperTests"
                ReferencedContainer = "container:AltKeeper.xcodeproj">
@@ -54,7 +54,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6A171FA34045406194D1F410"
+            BlueprintIdentifier = "9B9EFFE3FA414FD5A3BA3522"
             BuildableName = "AltKeeper.app"
             BlueprintName = "AltKeeper"
             ReferencedContainer = "container:AltKeeper.xcodeproj">
@@ -71,7 +71,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6A171FA34045406194D1F410"
+            BlueprintIdentifier = "9B9EFFE3FA414FD5A3BA3522"
             BuildableName = "AltKeeper.app"
             BlueprintName = "AltKeeper"
             ReferencedContainer = "container:AltKeeper.xcodeproj">
